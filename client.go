@@ -121,21 +121,33 @@ func (c *Client) get(path string) ([]byte, error) {
 	req, _ := http.NewRequest("GET", c.url(path), nil)
 	resp, err := c.do(req)
 	if err != nil {
-		log.Println(err)
+		log.Println("assist: ", err)
 		return []byte{}, err
 	}
 
 	defer resp.Body.Close()
 	bodyContent, err := ioutil.ReadAll(resp.Body)
 
-	// TODO: support additional valid responses HTTP 202, HTTP 204
-	if resp.StatusCode != 200 {
-		httpErr := &DribbbleError{}
-		_ = json.Unmarshal(bodyContent, httpErr)
-		return []byte{}, errors.New(httpErr.Message)
+	if c := resp.StatusCode; 200 <= c && c <= 299 {
+		return bodyContent, nil
 	}
 
-	return bodyContent, nil
+	httpErr := &DribbbleError{}
+	jsonErr := json.Unmarshal(bodyContent, httpErr)
+
+	if jsonErr != nil {
+		log.Println("assist: ", jsonErr)
+		return []byte{}, jsonErr
+	}
+
+	return []byte{}, errors.New(httpErr.Message)
+
+}
+
+// Raw HTTP GET wrapper
+func (c *Client) rawGet(path string) (*http.Response, error) {
+	req, _ := http.NewRequest("GET", c.url(path), nil)
+	return c.do(req)
 }
 
 // Convenience HTTP PUT wrapper

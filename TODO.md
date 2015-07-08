@@ -17,8 +17,8 @@
 * [x] List followers of a user
 * [x] List users followed by a user
 * [x] List shots for users followed by a user
-* [ ] Check if you are following a user
-* [ ] Check if one user is following another
+* [x] Check if you are following a user
+* [x] Check if one user is following another
 * [ ] Follow a user
 * [ ] Unfollow a user
 

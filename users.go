@@ -84,6 +84,16 @@ func (s *UsersService) Unfollow(name string) error {
 	return s.client.delete("/users/" + name + "/follow")
 }
 
+func (s *UsersService) Friend(name string) (bool, error) {
+	resp, err := s.client.rawGet("/user/following/" + name)
+	return resp.StatusCode == 204, err
+}
+
+func (s *UsersService) Friends(name, target string) (bool, error) {
+	resp, err := s.client.rawGet("/users/" + name + "/following/" + target)
+	return resp.StatusCode == 204, err
+}
+
 func (s *UsersService) Me() (*User, error) {
 	body, err := s.client.get("/user")
 	if err != nil {
