@@ -1,5 +1,9 @@
 ## Assist: Dribbble client written in Go.
 
+Assist is a Dribbble client written in Go. It is an attempt at learning how to build http wrappers in Go.
+It is not feature complete at the moment, see [TODO.md](TODO.md) for feature implementation status.
+
+
 To get started:
 
 ```go
