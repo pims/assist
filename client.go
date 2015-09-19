@@ -54,6 +54,7 @@ type Client struct {
 	RateLimitRemaining int
 	Shots              *ShotsService
 	Users              *UsersService
+	Teams              *TeamsService
 	logger             *log.Logger
 	sync.Mutex
 }
@@ -85,6 +86,7 @@ func configure(client *Client, logger *log.Logger) *Client {
 	client.logger = logger
 	client.Shots = NewShotsService(client)
 	client.Users = NewUsersService(client)
+	client.Teams = NewTeamsService(client)
 	return client
 }
 

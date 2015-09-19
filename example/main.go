@@ -8,6 +8,12 @@ import (
 	"strings"
 )
 
+func checkErr(err error) {
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
 func main() {
 
 	client := assist.NewDefaultClient()
@@ -18,38 +24,44 @@ func main() {
 	}
 	fmt.Println(user.Name)
 
+	members, err := client.Teams.Members("dribbble")
+	checkErr(err)
+
+	for _, member := range members {
+		log.Printf("[M] %s\n", member.Username)
+	}
+
+	shots, err := client.Teams.Shots("dribbble")
+	checkErr(err)
+
+	for _, shot := range shots {
+		log.Printf("[S] %s\n", shot.Title)
+	}
+
 	config := assist.NewConfig(os.Getenv("DRIBBBLE_TOKEN"), assist.DefaultApiEndpoint)
 	client = assist.NewClient(config)
 
 	user, err = client.Users.Get("simplebits")
+	checkErr(err)
 
-	if err != nil {
-		log.Fatal(err)
-	}
 	fmt.Println(user.Name)
 
-	shots, err := client.Shots.List(nil)
-	if err != nil {
-		log.Fatal("client.Shots.List", err)
-	}
+	shots, err = client.Shots.List(nil)
+	checkErr(err)
 
 	for _, shot := range shots {
 		log.Printf("%s : %s\n", shot.Title, strings.Join(shot.Tags, ", #"))
 	}
 
 	likes, err := client.Users.Likes("simplebits")
-	if err != nil {
-		log.Fatal(err)
-	}
+	checkErr(err)
 
 	for _, like := range likes {
 		log.Printf("[L] %s : %s\n", like.Title, strings.Join(like.Tags, ", #"))
 	}
 
 	buckets, err := client.Users.Buckets("simplebits")
-	if err != nil {
-		log.Fatal(err)
-	}
+	checkErr(err)
 
 	for _, bucket := range buckets {
 
@@ -58,27 +70,21 @@ func main() {
 	}
 
 	followers, err := client.Users.Followers("simplebits")
-	if err != nil {
-		log.Fatal(err)
-	}
+	checkErr(err)
 
 	for _, follower := range followers {
 		log.Printf("[F <-] %s\n", follower.Name)
 	}
 
 	followings, err := client.Users.Following("simplebits")
-	if err != nil {
-		log.Fatal(err)
-	}
+	checkErr(err)
 
 	for _, following := range followings {
 		log.Printf("[F ->] %s\n", following.Name)
 	}
 
 	teams, err := client.Users.Teams("simplebits")
-	if err != nil {
-		log.Fatal(err)
-	}
+	checkErr(err)
 
 	for _, team := range teams {
 		log.Printf("[T] %s\n", team.Name)

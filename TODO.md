@@ -98,8 +98,8 @@
 
 ### Teams
 
-* [ ] List shots for a team
-* [ ] List a team’s members
+* [x] List shots for a team
+* [x] List a team’s members
 
 
 ### Buckets
