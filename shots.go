@@ -4,6 +4,10 @@ type ShotsService struct {
 	client *Client
 }
 
+func NewShotsService(client *Client) *ShotsService {
+	return &ShotsService{client: client}
+}
+
 type QueryParams struct {
 	List      *string
 	TimeFrame *string

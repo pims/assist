@@ -8,6 +8,10 @@ type UsersService struct {
 	client *Client
 }
 
+func NewUsersService(client *Client) *UsersService {
+	return &UsersService{client: client}
+}
+
 func (s *UsersService) Get(username string) (*User, error) {
 	body, err := s.client.get("/users/" + username)
 	if err != nil {

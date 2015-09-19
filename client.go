@@ -16,7 +16,7 @@ const DefaultApiEndpoint = "https://api.dribbble.com/v1"
 
 var (
 	// For methods not yet implemented
-	ErrNotImplemented = errors.New("dribbble: method not implemented")
+	ErrNotImplemented = errors.New("method not implemented.")
 )
 
 /*
@@ -42,6 +42,10 @@ type DribbbleError struct {
 	Message   string `json:"message"`
 }
 
+func (d *DribbbleError) String() string {
+	return fmt.Sprintf("%s %s", d.Message, d.Attribute)
+}
+
 // Assist client contains methods to query
 // the Dribbble API
 type Client struct {
@@ -50,17 +54,21 @@ type Client struct {
 	RateLimitRemaining int
 	Shots              *ShotsService
 	Users              *UsersService
+	logger             *log.Logger
 	sync.Mutex
 }
 
 type Config struct {
 	Token    string
 	Endpoint string
+	logger   *log.Logger
 }
+
+var defaultLogger = log.New(os.Stderr, "[assist] ", log.LstdFlags)
 
 // Creates new Config
 func NewConfig(token, endpoint string) *Config {
-	return &Config{Token: token, Endpoint: endpoint}
+	return &Config{Token: token, Endpoint: endpoint, logger: defaultLogger}
 }
 
 // Creates new client with given configuration
@@ -70,9 +78,14 @@ func NewClient(config *Config) *Client {
 		config: config,
 	}
 
-	c.Shots = &ShotsService{client: c}
-	c.Users = &UsersService{client: c}
-	return c
+	return configure(c, config.logger)
+}
+
+func configure(client *Client, logger *log.Logger) *Client {
+	client.logger = logger
+	client.Shots = NewShotsService(client)
+	client.Users = NewUsersService(client)
+	return client
 }
 
 // Creates new client with default configuration
@@ -84,10 +97,7 @@ func NewDefaultClient() *Client {
 			Endpoint: DefaultApiEndpoint,
 		},
 	}
-
-	c.Shots = &ShotsService{client: c}
-	c.Users = &UsersService{client: c}
-	return c
+	return configure(c, defaultLogger)
 }
 
 // Retrieve most recent rate limit remaining
@@ -106,6 +116,10 @@ func (c *Client) url(path string) string {
 func (c *Client) do(req *http.Request) (*http.Response, error) {
 	req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", c.config.Token))
 	resp, err := c.client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+
 	val := resp.Header.Get("X-RateLimit-Remaining")
 	if val != "" {
 		c.Lock()
@@ -121,7 +135,7 @@ func (c *Client) get(path string) ([]byte, error) {
 	req, _ := http.NewRequest("GET", c.url(path), nil)
 	resp, err := c.do(req)
 	if err != nil {
-		log.Println("assist: ", err)
+		c.logger.Println(err)
 		return []byte{}, err
 	}
 
@@ -136,10 +150,10 @@ func (c *Client) get(path string) ([]byte, error) {
 	jsonErr := json.Unmarshal(bodyContent, httpErr)
 
 	if jsonErr != nil {
-		log.Println("assist: ", jsonErr)
+		c.logger.Println(jsonErr)
 		return []byte{}, jsonErr
 	}
-
+	c.logger.Println(httpErr)
 	return []byte{}, errors.New(httpErr.Message)
 
 }
