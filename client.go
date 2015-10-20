@@ -12,10 +12,11 @@ import (
 	"sync"
 )
 
-const DefaultApiEndpoint = "https://api.dribbble.com/v1"
+// Default API endpoint for Dribbble.com
+const DefaultAPIEndpoint = "https://api.dribbble.com/v1"
 
 var (
-	// For methods not yet implemented
+	// ErrNotImplemented for methods not yet implemented
 	ErrNotImplemented = errors.New("method not implemented.")
 )
 
@@ -36,7 +37,7 @@ X-RateLimit-Reset: 1392321600
 
 */
 
-// Error returned by Dribbble API
+// DribbbleError Error returned by Dribbble API
 type DribbbleError struct {
 	Attribute string `json:"attribute"`
 	Message   string `json:"message"`
@@ -46,7 +47,7 @@ func (d *DribbbleError) String() string {
 	return fmt.Sprintf("%s %s", d.Message, d.Attribute)
 }
 
-// Assist client contains methods to query
+// Client contains methods to query
 // the Dribbble API
 type Client struct {
 	client             *http.Client
@@ -59,6 +60,7 @@ type Client struct {
 	sync.Mutex
 }
 
+// Config for Client
 type Config struct {
 	Token    string
 	Endpoint string
@@ -67,12 +69,12 @@ type Config struct {
 
 var defaultLogger = log.New(os.Stderr, "[assist] ", log.LstdFlags)
 
-// Creates new Config
+// NewConfig creates new Config
 func NewConfig(token, endpoint string) *Config {
 	return &Config{Token: token, Endpoint: endpoint, logger: defaultLogger}
 }
 
-// Creates new client with given configuration
+// NewClient creates new client with given configuration
 func NewClient(config *Config) *Client {
 	c := &Client{
 		client: http.DefaultClient,
@@ -90,19 +92,19 @@ func configure(client *Client, logger *log.Logger) *Client {
 	return client
 }
 
-// Creates new client with default configuration
+// NewDefaultClient creates new client with default configuration
 func NewDefaultClient() *Client {
 	c := &Client{
 		client: http.DefaultClient,
 		config: &Config{
 			Token:    os.Getenv("DRIBBBLE_TOKEN"),
-			Endpoint: DefaultApiEndpoint,
+			Endpoint: DefaultAPIEndpoint,
 		},
 	}
 	return configure(c, defaultLogger)
 }
 
-// Retrieve most recent rate limit remaining
+// Status retrieves most recent rate limit remaining
 func (c *Client) Status() int {
 	c.Lock()
 	defer c.Unlock()
