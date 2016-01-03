@@ -25,6 +25,13 @@ func configureClient(rootPath string, t *testing.T) (*httptest.Server, *Client) 
 	return ts, NewClient(config)
 }
 
+func checkInt(t *testing.T, got, want int) {
+	if got != want {
+		t.Errorf("Got %d, expected: %d", got, want)
+		t.FailNow()
+	}
+}
+
 func TestTeamsShots(t *testing.T) {
 	ts, client := configureClient("testutils", t)
 	defer ts.Close()
@@ -181,9 +188,17 @@ func TestProject(t *testing.T) {
 	checkInt(t, project.User.ProjectsCount, 8)
 }
 
-func checkInt(t *testing.T, got, want int) {
-	if got != want {
-		t.Errorf("Got %d, expected: %d", got, want)
+func TestShotAttachments(t *testing.T) {
+	ts, client := configureClient("testutils", t)
+	defer ts.Close()
+
+	shotId := 0
+	attachments, err := client.Shots.Attachments(shotId)
+	if err != nil {
+		t.Errorf("Failed: %v", err)
 		t.FailNow()
 	}
+	checkInt(t, len(attachments), 1)
+	checkInt(t, attachments[0].Id, 206165)
+	checkInt(t, attachments[0].Size, 116375)
 }

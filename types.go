@@ -144,3 +144,15 @@ type Following struct {
 	CreatedAt string `json:"created_at"`
 	User      *User  `json:"followee"`
 }
+
+type ContentType string
+
+type Attachment struct {
+	Id           int         `json:"id"`
+	Url          string      `json:"url"`
+	ThumbnailUrl string      `json:"thumbnail_url"`
+	Size         int         `json:"size"`
+	ContentType  ContentType `json:"content_type"`
+	ViewsCount   int         `json:"views_count"`
+	CreatedAt    string      `json:"created_at"`
+}

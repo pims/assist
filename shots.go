@@ -1,6 +1,7 @@
 package assist
 
 import (
+	"encoding/json"
 	"fmt"
 )
 
@@ -57,4 +58,15 @@ func (s *ShotsService) Delete(id int) error {
 
 func (s *ShotsService) Buckets(id int) ([]*Bucket, error) {
 	return s.client.buckets(fmt.Sprintf("/shots/%d/buckets", id))
+}
+
+func (s *ShotsService) Attachments(id int) ([]*Attachment, error) {
+	body, err := s.client.get(fmt.Sprintf("/shots/%d/attachments", id))
+	if err != nil {
+		return nil, err
+	}
+
+	attachments := make([]*Attachment, 0)
+	jsonErr := json.Unmarshal(body, &attachments)
+	return attachments, jsonErr
 }
