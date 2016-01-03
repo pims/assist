@@ -119,5 +119,5 @@
 
 ### Projects
 
-* [ ] Get a project
-* [ ] List shots for a project
+* [x] Get a project
+* [x] List shots for a project

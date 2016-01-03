@@ -163,3 +163,27 @@ func TestBucketShots(t *testing.T) {
 		t.FailNow()
 	}
 }
+
+func TestProject(t *testing.T) {
+	ts, client := configureClient("testutils", t)
+	defer ts.Close()
+
+	projectId := 3
+	project, err := client.Projects.Get(projectId)
+	if err != nil {
+		t.Errorf("Failed: %v", err)
+		t.FailNow()
+	}
+
+	checkInt(t, project.Id, projectId)
+	checkInt(t, project.ShotsCount, 4)
+	checkInt(t, project.ShotsCount, 4)
+	checkInt(t, project.User.ProjectsCount, 8)
+}
+
+func checkInt(t *testing.T, got, want int) {
+	if got != want {
+		t.Errorf("Got %d, expected: %d", got, want)
+		t.FailNow()
+	}
+}
