@@ -84,3 +84,30 @@ func TestUserTeams(t *testing.T) {
 		t.FailNow()
 	}
 }
+
+func TestShotBuckets(t *testing.T) {
+	ts, client := configureClient("testutils", t)
+	defer ts.Close()
+
+	shotId := 471756
+	buckets, err := client.Shots.Buckets(shotId)
+	if err != nil {
+		t.Errorf("Failed: %v", err)
+		t.FailNow()
+	}
+
+	if len(buckets) != 1 {
+		t.Error("Teams length don't match")
+		t.FailNow()
+	}
+
+	if buckets[0].Id != 2754 {
+		t.Errorf("Got %d, expected: %d", buckets[0].Id, 2754)
+		t.FailNow()
+	}
+
+	if buckets[0].User.Id != 1 {
+		t.Error("User id for bucket doesn't match")
+		t.FailNow()
+	}
+}

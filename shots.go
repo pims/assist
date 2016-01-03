@@ -1,5 +1,9 @@
 package assist
 
+import (
+	"fmt"
+)
+
 type ShotsService struct {
 	client *Client
 }
@@ -36,17 +40,21 @@ func (s *ShotsService) List(params *QueryParams) ([]*Shot, error) {
 }
 
 func (s *ShotsService) Get(id int) (*Shot, error) {
-	return s.client.shot("/shot/" + string(id))
+	return s.client.shot(fmt.Sprintf("/shot/%d", id))
 }
 
 func (s *ShotsService) Create(name, description string) (*Shot, error) {
-	return nil, nil
+	return nil, ErrNotImplemented
 }
 
 func (s *ShotsService) Update(id int, name, description string) (*Shot, error) {
-	return nil, nil
+	return nil, ErrNotImplemented
 }
 
 func (s *ShotsService) Delete(id int) error {
-	return nil
+	return ErrNotImplemented
+}
+
+func (s *ShotsService) Buckets(id int) ([]*Bucket, error) {
+	return s.client.buckets(fmt.Sprintf("/shots/%d/buckets", id))
 }

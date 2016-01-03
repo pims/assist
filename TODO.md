@@ -66,7 +66,7 @@
 
 #####  Buckets
 
-* [ ] List buckets for a shot
+* [x] List buckets for a shot
 
 
 #####  Comments

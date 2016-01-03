@@ -1,21 +1,11 @@
 package assist
 
-import (
-	"encoding/json"
-)
-
 type BucketService struct {
 	client *Client
 }
 
 func (s *BucketService) Get(id int) (*Bucket, error) {
-	body, err := s.client.get("/buckets/" + string(id))
-	if err != nil {
-		return nil, err
-	}
-	bucket := &Bucket{}
-	jsonErr := json.Unmarshal(body, bucket)
-	return bucket, jsonErr
+	return s.client.bucket("/buckets/" + string(id))
 }
 
 func (s *BucketService) Create(name, description string) (*Bucket, error) {
