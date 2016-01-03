@@ -70,3 +70,14 @@ func (s *ShotsService) Attachments(id int) ([]*Attachment, error) {
 	jsonErr := json.Unmarshal(body, &attachments)
 	return attachments, jsonErr
 }
+
+func (s *ShotsService) Attachment(shotId, attachmentId int) (*Attachment, error) {
+	body, err := s.client.get(fmt.Sprintf("/shots/%d/attachments/%d", shotId, attachmentId))
+	if err != nil {
+		return nil, err
+	}
+
+	attachment := &Attachment{}
+	jsonErr := json.Unmarshal(body, attachment)
+	return attachment, jsonErr
+}

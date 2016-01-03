@@ -202,3 +202,19 @@ func TestShotAttachments(t *testing.T) {
 	checkInt(t, attachments[0].Id, 206165)
 	checkInt(t, attachments[0].Size, 116375)
 }
+
+func TestShotAttachment(t *testing.T) {
+	ts, client := configureClient("testutils", t)
+	defer ts.Close()
+
+	shotId := 0
+	attachmentId := 206165
+	attachment, err := client.Shots.Attachment(shotId, attachmentId)
+	if err != nil {
+		t.Errorf("Failed: %v", err)
+		t.FailNow()
+	}
+
+	checkInt(t, attachment.Id, 206165)
+	checkInt(t, attachment.Size, 116375)
+}

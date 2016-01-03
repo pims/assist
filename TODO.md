@@ -60,7 +60,7 @@
 
 * [x] List attachments for a shot
 * [ ] Create an attachment
-* [ ] Get a single attachment
+* [x] Get a single attachment
 * [ ] Delete an attachment
 
 
