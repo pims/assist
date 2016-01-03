@@ -121,3 +121,8 @@
 
 * [x] Get a project
 * [x] List shots for a project
+
+
+### Rebounds
+
+* [ ] List rebounds for a shot
