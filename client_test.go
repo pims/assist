@@ -133,3 +133,33 @@ func TestBucket(t *testing.T) {
 		t.FailNow()
 	}
 }
+
+func TestBucketShots(t *testing.T) {
+	ts, client := configureClient("testutils", t)
+	defer ts.Close()
+
+	shots, err := client.Buckets.Shots(2754)
+	if err != nil {
+		t.Errorf("Failed: %v", err)
+		t.FailNow()
+	}
+
+	if len(shots) != 1 {
+		t.Error("Length don't match")
+		t.FailNow()
+	}
+
+	if shots[0].LikesCount != 149 {
+		t.Errorf("Got %d, expected: %d", shots[0].LikesCount, 149)
+		t.FailNow()
+	}
+	if shots[0].User.Id != 1 {
+		t.Errorf("Got %d, expected: %d", shots[0].User.Id, 1)
+		t.FailNow()
+	}
+
+	if shots[0].Team.Id != 39 {
+		t.Errorf("Got %d, expected: %d", shots[0].Team.Id, 39)
+		t.FailNow()
+	}
+}

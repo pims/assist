@@ -112,7 +112,7 @@
 
 #####  Shots
 
-* [ ] List shots for a bucket
+* [x] List shots for a bucket
 * [ ] Add a shot to a bucket
 * [ ] Remove a shot from a bucket
 
