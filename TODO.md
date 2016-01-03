@@ -104,7 +104,7 @@
 
 ### Buckets
 
-* [ ] Get a bucket
+* [x] Get a bucket
 * [ ] Create a bucket
 * [ ] Update a bucket
 * [ ] Delete a bucket

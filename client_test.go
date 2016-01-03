@@ -111,3 +111,25 @@ func TestShotBuckets(t *testing.T) {
 		t.FailNow()
 	}
 }
+
+func TestBucket(t *testing.T) {
+	ts, client := configureClient("testutils", t)
+	defer ts.Close()
+
+	bucketId := 2754
+	bucket, err := client.Buckets.Get(bucketId)
+	if err != nil {
+		t.Errorf("Failed: %v", err)
+		t.FailNow()
+	}
+
+	if bucket.Id != 2754 {
+		t.Errorf("Got %d, expected: %d", bucket.Id, 2754)
+		t.FailNow()
+	}
+
+	if bucket.User.Id != 1 {
+		t.Error("User id for bucket doesn't match")
+		t.FailNow()
+	}
+}
