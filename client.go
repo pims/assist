@@ -56,6 +56,8 @@ type Client struct {
 	Shots              *ShotsService
 	Users              *UsersService
 	Teams              *TeamsService
+	Buckets            *BucketsService
+	Projects           *ProjectsService
 	logger             *log.Logger
 	sync.Mutex
 }
@@ -89,6 +91,8 @@ func configure(client *Client, logger *log.Logger) *Client {
 	client.Shots = NewShotsService(client)
 	client.Users = NewUsersService(client)
 	client.Teams = NewTeamsService(client)
+	client.Buckets = NewBucketsService(client)
+	client.Projects = NewProjectsService(client)
 	return client
 }
 
@@ -205,4 +209,26 @@ func (c *Client) shot(path string) (*Shot, error) {
 	shot := &Shot{}
 	jsonErr := json.Unmarshal(body, shot)
 	return shot, jsonErr
+}
+
+// Convenience method to decode response as []*Bucket
+func (c *Client) buckets(path string) ([]*Bucket, error) {
+	body, err := c.get(path)
+	if err != nil {
+		return nil, err
+	}
+	collection := make([]*Bucket, 0)
+	jsonErr := json.Unmarshal(body, &collection)
+	return collection, jsonErr
+}
+
+// Convenience method to decode response as *Bucket
+func (c *Client) bucket(path string) (*Bucket, error) {
+	body, err := c.get(path)
+	if err != nil {
+		return nil, err
+	}
+	bucket := &Bucket{}
+	jsonErr := json.Unmarshal(body, bucket)
+	return bucket, jsonErr
 }

@@ -25,6 +25,13 @@ func configureClient(rootPath string, t *testing.T) (*httptest.Server, *Client) 
 	return ts, NewClient(config)
 }
 
+func checkInt(t *testing.T, got, want int) {
+	if got != want {
+		t.Errorf("Got %d, expected: %d", got, want)
+		t.FailNow()
+	}
+}
+
 func TestTeamsShots(t *testing.T) {
 	ts, client := configureClient("testutils", t)
 	defer ts.Close()
@@ -83,4 +90,131 @@ func TestUserTeams(t *testing.T) {
 		t.Error("Teams length don't match")
 		t.FailNow()
 	}
+}
+
+func TestShotBuckets(t *testing.T) {
+	ts, client := configureClient("testutils", t)
+	defer ts.Close()
+
+	shotId := 471756
+	buckets, err := client.Shots.Buckets(shotId)
+	if err != nil {
+		t.Errorf("Failed: %v", err)
+		t.FailNow()
+	}
+
+	if len(buckets) != 1 {
+		t.Error("Teams length don't match")
+		t.FailNow()
+	}
+
+	if buckets[0].Id != 2754 {
+		t.Errorf("Got %d, expected: %d", buckets[0].Id, 2754)
+		t.FailNow()
+	}
+
+	if buckets[0].User.Id != 1 {
+		t.Error("User id for bucket doesn't match")
+		t.FailNow()
+	}
+}
+
+func TestBucket(t *testing.T) {
+	ts, client := configureClient("testutils", t)
+	defer ts.Close()
+
+	bucketId := 2754
+	bucket, err := client.Buckets.Get(bucketId)
+	if err != nil {
+		t.Errorf("Failed: %v", err)
+		t.FailNow()
+	}
+
+	if bucket.Id != 2754 {
+		t.Errorf("Got %d, expected: %d", bucket.Id, 2754)
+		t.FailNow()
+	}
+
+	if bucket.User.Id != 1 {
+		t.Error("User id for bucket doesn't match")
+		t.FailNow()
+	}
+}
+
+func TestBucketShots(t *testing.T) {
+	ts, client := configureClient("testutils", t)
+	defer ts.Close()
+
+	shots, err := client.Buckets.Shots(2754)
+	if err != nil {
+		t.Errorf("Failed: %v", err)
+		t.FailNow()
+	}
+
+	if len(shots) != 1 {
+		t.Error("Length don't match")
+		t.FailNow()
+	}
+
+	if shots[0].LikesCount != 149 {
+		t.Errorf("Got %d, expected: %d", shots[0].LikesCount, 149)
+		t.FailNow()
+	}
+	if shots[0].User.Id != 1 {
+		t.Errorf("Got %d, expected: %d", shots[0].User.Id, 1)
+		t.FailNow()
+	}
+
+	if shots[0].Team.Id != 39 {
+		t.Errorf("Got %d, expected: %d", shots[0].Team.Id, 39)
+		t.FailNow()
+	}
+}
+
+func TestProject(t *testing.T) {
+	ts, client := configureClient("testutils", t)
+	defer ts.Close()
+
+	projectId := 3
+	project, err := client.Projects.Get(projectId)
+	if err != nil {
+		t.Errorf("Failed: %v", err)
+		t.FailNow()
+	}
+
+	checkInt(t, project.Id, projectId)
+	checkInt(t, project.ShotsCount, 4)
+	checkInt(t, project.ShotsCount, 4)
+	checkInt(t, project.User.ProjectsCount, 8)
+}
+
+func TestShotAttachments(t *testing.T) {
+	ts, client := configureClient("testutils", t)
+	defer ts.Close()
+
+	shotId := 0
+	attachments, err := client.Shots.Attachments(shotId)
+	if err != nil {
+		t.Errorf("Failed: %v", err)
+		t.FailNow()
+	}
+	checkInt(t, len(attachments), 1)
+	checkInt(t, attachments[0].Id, 206165)
+	checkInt(t, attachments[0].Size, 116375)
+}
+
+func TestShotAttachment(t *testing.T) {
+	ts, client := configureClient("testutils", t)
+	defer ts.Close()
+
+	shotId := 0
+	attachmentId := 206165
+	attachment, err := client.Shots.Attachment(shotId, attachmentId)
+	if err != nil {
+		t.Errorf("Failed: %v", err)
+		t.FailNow()
+	}
+
+	checkInt(t, attachment.Id, 206165)
+	checkInt(t, attachment.Size, 116375)
 }

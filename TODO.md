@@ -58,15 +58,15 @@
 
 #####  Attachments
 
-* [ ] List attachments for a shot
+* [x] List attachments for a shot
 * [ ] Create an attachment
-* [ ] Get a single attachment
+* [x] Get a single attachment
 * [ ] Delete an attachment
 
 
 #####  Buckets
 
-* [ ] List buckets for a shot
+* [x] List buckets for a shot
 
 
 #####  Comments
@@ -104,7 +104,7 @@
 
 ### Buckets
 
-* [ ] Get a bucket
+* [x] Get a bucket
 * [ ] Create a bucket
 * [ ] Update a bucket
 * [ ] Delete a bucket
@@ -112,12 +112,17 @@
 
 #####  Shots
 
-* [ ] List shots for a bucket
+* [x] List shots for a bucket
 * [ ] Add a shot to a bucket
 * [ ] Remove a shot from a bucket
 
 
 ### Projects
 
-* [ ] Get a project
-* [ ] List shots for a project
+* [x] Get a project
+* [x] List shots for a project
+
+
+### Rebounds
+
+* [ ] List rebounds for a shot

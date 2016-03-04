@@ -4,8 +4,10 @@ import (
 	"encoding/json"
 )
 
+// Links represent a map from name -> http urls to a user's social network links
 type Links map[string]string
 
+// User represents a dribbble user
 type User struct {
 	Id                    int    `json:"id"`
 	Name                  string `json:"name"`
@@ -43,7 +45,7 @@ func (u *User) String() string {
 	return string(buff)
 }
 
-// A Team is a strict superset of a User
+// Team is a strict superset of a User
 type Team struct {
 	User
 
@@ -57,6 +59,7 @@ func (t *Team) String() string {
 	return string(buff)
 }
 
+// Shot represents a dribbble shot
 type Shot struct {
 	Id               int               `json:"id"`
 	Title            string            `json:"title"`
@@ -89,6 +92,7 @@ func (s *Shot) String() string {
 	return string(buff)
 }
 
+// Project represents a dribbble project
 type Project struct {
 	Id          int    `json:"id"`
 	Name        string `json:"name"`
@@ -104,6 +108,7 @@ func (p *Project) String() string {
 	return string(buff)
 }
 
+// Bucket represents a dribbble bucket
 type Bucket struct {
 	Id          int    `json:"id"`
 	Name        string `json:"name"`
@@ -119,20 +124,35 @@ func (b *Bucket) String() string {
 	return string(buff)
 }
 
+// Like represents a dribbble like
 type Like struct {
 	Id        int    `json:"id"`
 	CreatedAt string `json:"created_at"`
 	Shot      *Shot  `json:"shot"`
 }
 
+// Follower represents a dribbble follower
 type Follower struct {
 	Id        int    `json:"id"`
 	CreatedAt string `json:"created_at"`
 	User      *User  `json:"follower"`
 }
 
+// Following represents a dribbble followee
 type Following struct {
 	Id        int    `json:"id"`
 	CreatedAt string `json:"created_at"`
 	User      *User  `json:"followee"`
+}
+
+type ContentType string
+
+type Attachment struct {
+	Id           int         `json:"id"`
+	Url          string      `json:"url"`
+	ThumbnailUrl string      `json:"thumbnail_url"`
+	Size         int         `json:"size"`
+	ContentType  ContentType `json:"content_type"`
+	ViewsCount   int         `json:"views_count"`
+	CreatedAt    string      `json:"created_at"`
 }
