@@ -4,10 +4,12 @@ import (
 	"encoding/json"
 )
 
+// BucketService is something
 type BucketService struct {
 	client *Client
 }
 
+// Get a Bucket by id
 func (s *BucketService) Get(id int) (*Bucket, error) {
 	body, err := s.client.get("/buckets/" + string(id))
 	if err != nil {

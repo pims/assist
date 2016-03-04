@@ -38,7 +38,7 @@ func main() {
 		log.Printf("[S] %s\n", shot.Title)
 	}
 
-	config := assist.NewConfig(os.Getenv("DRIBBBLE_TOKEN"), assist.DefaultApiEndpoint)
+	config := assist.NewConfig(os.Getenv("DRIBBBLE_TOKEN"), assist.DefaultAPIEndpoint)
 	client = assist.NewClient(config)
 
 	user, err = client.Users.Get("simplebits")
