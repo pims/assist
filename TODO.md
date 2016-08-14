@@ -71,8 +71,8 @@
 
 #####  Comments
 
-* [ ] List comments for a shot
-* [ ] List likes for a comment
+* [x] List comments for a shot
+* [x] List likes for a comment
 * [ ] Create a comment
 * [ ] Get a single comment
 * [ ] Update a comment
