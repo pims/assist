@@ -18,7 +18,6 @@ user, err := client.Users.Get("simplebits") // handle err
 fmt.Println(user.Name) // Dan Cederholm
 ```
 
-
 or 
 
 ```go
