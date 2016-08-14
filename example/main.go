@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/pims/assist"
+	"github.com/pims/assist/service"
 	"log"
 	"os"
 	"strings"
@@ -16,7 +17,7 @@ func checkErr(err error) {
 
 func main() {
 
-	client := assist.NewDefaultClient()
+	client := service.NewDefaultClient()
 	user, err := client.Users.Get("simplebits")
 
 	if err != nil {
@@ -38,8 +39,8 @@ func main() {
 		log.Printf("[S] %s\n", shot.Title)
 	}
 
-	config := assist.NewConfig(os.Getenv("DRIBBBLE_TOKEN"), assist.DefaultAPIEndpoint)
-	client = assist.NewClient(config)
+	config := service.NewConfig(os.Getenv("DRIBBBLE_TOKEN"), assist.DefaultAPIEndpoint)
+	client = service.NewClient(config)
 
 	user, err = client.Users.Get("simplebits")
 	checkErr(err)

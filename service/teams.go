@@ -1,38 +1,39 @@
-package assist
+package service
 
 import (
 	"encoding/json"
+	"github.com/pims/assist"
 )
 
-type TeamsService struct {
+type Teams struct {
 	client *Client
 }
 
-// NewTeamsService creates a new TeamService client
-func NewTeamsService(client *Client) *TeamsService {
-	return &TeamsService{client: client}
+// NewTeams creates a new TeamService client
+func NewTeams(client *Client) *Teams {
+	return &Teams{client: client}
 }
 
 // Retrieves list of team members for the given team
-func (s *TeamsService) Members(teamName string) ([]*User, error) {
+func (s *Teams) Members(teamName string) ([]*assist.User, error) {
 	body, err := s.client.get("/teams/" + teamName + "/members")
 	if err != nil {
 		return nil, err
 	}
 
-	members := make([]*User, 0)
+	members := make([]*assist.User, 0)
 	jsonErr := json.Unmarshal(body, &members)
 	return members, jsonErr
 }
 
 // Retrieves list of team shots for the given team
-func (s *TeamsService) Shots(teamName string) ([]*Shot, error) {
+func (s *Teams) Shots(teamName string) ([]*assist.Shot, error) {
 	body, err := s.client.get("/teams/" + teamName + "/shots")
 	if err != nil {
 		return nil, err
 	}
 
-	shots := make([]*Shot, 0)
+	shots := make([]*assist.Shot, 0)
 	jsonErr := json.Unmarshal(body, &shots)
 	return shots, jsonErr
 }

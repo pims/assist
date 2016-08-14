@@ -1,4 +1,4 @@
-package assist
+package service
 
 import (
 	"fmt"
@@ -33,7 +33,7 @@ func checkInt(t *testing.T, got, want int) {
 }
 
 func TestTeamsShots(t *testing.T) {
-	ts, client := configureClient("testutils", t)
+	ts, client := configureClient("../testutils", t)
 	defer ts.Close()
 
 	shots, err := client.Teams.Shots("simplebits")
@@ -49,7 +49,7 @@ func TestTeamsShots(t *testing.T) {
 }
 
 func TestUserGet(t *testing.T) {
-	ts, client := configureClient("testutils", t)
+	ts, client := configureClient("../testutils", t)
 	defer ts.Close()
 
 	username := "simplebits"
@@ -66,7 +66,7 @@ func TestUserGet(t *testing.T) {
 }
 
 func TestUserTeams(t *testing.T) {
-	ts, client := configureClient("testutils", t)
+	ts, client := configureClient("../testutils", t)
 	defer ts.Close()
 
 	username := "simplebits"
@@ -93,7 +93,7 @@ func TestUserTeams(t *testing.T) {
 }
 
 func TestShotBuckets(t *testing.T) {
-	ts, client := configureClient("testutils", t)
+	ts, client := configureClient("../testutils", t)
 	defer ts.Close()
 
 	shotId := 471756
@@ -120,7 +120,7 @@ func TestShotBuckets(t *testing.T) {
 }
 
 func TestBucket(t *testing.T) {
-	ts, client := configureClient("testutils", t)
+	ts, client := configureClient("../testutils", t)
 	defer ts.Close()
 
 	bucketId := 2754
@@ -142,7 +142,7 @@ func TestBucket(t *testing.T) {
 }
 
 func TestBucketShots(t *testing.T) {
-	ts, client := configureClient("testutils", t)
+	ts, client := configureClient("../testutils", t)
 	defer ts.Close()
 
 	shots, err := client.Buckets.Shots(2754)
@@ -172,7 +172,7 @@ func TestBucketShots(t *testing.T) {
 }
 
 func TestProject(t *testing.T) {
-	ts, client := configureClient("testutils", t)
+	ts, client := configureClient("../testutils", t)
 	defer ts.Close()
 
 	projectId := 3
@@ -189,7 +189,7 @@ func TestProject(t *testing.T) {
 }
 
 func TestShotAttachments(t *testing.T) {
-	ts, client := configureClient("testutils", t)
+	ts, client := configureClient("../testutils", t)
 	defer ts.Close()
 
 	shotId := 0
@@ -204,7 +204,7 @@ func TestShotAttachments(t *testing.T) {
 }
 
 func TestShotAttachment(t *testing.T) {
-	ts, client := configureClient("testutils", t)
+	ts, client := configureClient("../testutils", t)
 	defer ts.Close()
 
 	shotId := 0
@@ -220,7 +220,7 @@ func TestShotAttachment(t *testing.T) {
 }
 
 func TestShotComments(t *testing.T) {
-	ts, client := configureClient("testutils", t)
+	ts, client := configureClient("../testutils", t)
 	defer ts.Close()
 
 	shotId := 471756
@@ -238,7 +238,7 @@ func TestShotComments(t *testing.T) {
 }
 
 func TestShotCommentsLikes(t *testing.T) {
-	ts, client := configureClient("testutils", t)
+	ts, client := configureClient("../testutils", t)
 	defer ts.Close()
 
 	shotId := 471756

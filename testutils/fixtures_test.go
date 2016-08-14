@@ -1,8 +1,6 @@
 package testutils
 
 import (
-	"fmt"
-	"strings"
 	"testing"
 )
 
@@ -13,7 +11,7 @@ func TestUrlToFixturePath(t *testing.T) {
 		path string
 		root string
 	}{
-		{"/teams/simplebits/shots", "fixtures/teams-simplebits-shots.json", "./"},
+		{"/teams/simplebits/shots", "/fixtures/teams-simplebits-shots.json", ""},
 	}
 
 	for _, input := range inputs {
