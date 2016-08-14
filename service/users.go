@@ -1,129 +1,130 @@
-package assist
+package service
 
 import (
 	"encoding/json"
+	"github.com/pims/assist"
 )
 
-type UsersService struct {
+type Users struct {
 	client *Client
 }
 
-func NewUsersService(client *Client) *UsersService {
-	return &UsersService{client: client}
+func NewUsers(client *Client) *Users {
+	return &Users{client: client}
 }
 
-func (s *UsersService) Get(username string) (*User, error) {
+func (s *Users) Get(username string) (*assist.User, error) {
 	body, err := s.client.get("/users/" + username)
 	if err != nil {
 		return nil, err
 	}
-	user := &User{}
+	user := &assist.User{}
 	jsonErr := json.Unmarshal(body, user)
 	return user, jsonErr
 }
 
-func (s *UsersService) Likes(name string) ([]*Shot, error) {
+func (s *Users) Likes(name string) ([]*assist.Shot, error) {
 	body, err := s.client.get("/users/" + name + "/likes")
 	if err != nil {
 		return nil, err
 	}
 
-	likes := make([]*Like, 0)
+	likes := make([]*assist.Like, 0)
 	jsonErr := json.Unmarshal(body, &likes)
 
-	shots := make([]*Shot, len(likes))
+	shots := make([]*assist.Shot, len(likes))
 	for i, like := range likes {
 		shots[i] = like.Shot
 	}
 	return shots, jsonErr
 }
 
-func (s *UsersService) Buckets(name string) ([]*Bucket, error) {
+func (s *Users) Buckets(name string) ([]*assist.Bucket, error) {
 	body, err := s.client.get("/users/" + name + "/buckets")
 	if err != nil {
 		return nil, err
 	}
 
-	buckets := make([]*Bucket, 0)
+	buckets := make([]*assist.Bucket, 0)
 	jsonErr := json.Unmarshal(body, &buckets)
 	return buckets, jsonErr
 }
 
-func (s *UsersService) Followers(name string) ([]*User, error) {
+func (s *Users) Followers(name string) ([]*assist.User, error) {
 	body, err := s.client.get("/users/" + name + "/followers")
 	if err != nil {
 		return nil, err
 	}
 
-	followers := make([]*Follower, 0)
+	followers := make([]*assist.Follower, 0)
 	jsonErr := json.Unmarshal(body, &followers)
 
-	users := make([]*User, len(followers))
+	users := make([]*assist.User, len(followers))
 	for i, follower := range followers {
 		users[i] = follower.User
 	}
 	return users, jsonErr
 }
 
-func (s *UsersService) Following(name string) ([]*User, error) {
+func (s *Users) Following(name string) ([]*assist.User, error) {
 	body, err := s.client.get("/users/" + name + "/following")
 	if err != nil {
 		return nil, err
 	}
 
-	followings := make([]*Following, 0)
+	followings := make([]*assist.Following, 0)
 	jsonErr := json.Unmarshal(body, &followings)
-	users := make([]*User, len(followings))
+	users := make([]*assist.User, len(followings))
 	for i, following := range followings {
 		users[i] = following.User
 	}
 	return users, jsonErr
 }
 
-func (s *UsersService) Follow(name string) error {
-	return ErrNotImplemented
+func (s *Users) Follow(name string) error {
+	return assist.ErrNotImplemented
 }
 
-func (s *UsersService) Unfollow(name string) error {
+func (s *Users) Unfollow(name string) error {
 	return s.client.delete("/users/" + name + "/follow")
 }
 
-func (s *UsersService) Friend(name string) (bool, error) {
+func (s *Users) Friend(name string) (bool, error) {
 	resp, err := s.client.rawGet("/user/following/" + name)
 	return resp.StatusCode == 204, err
 }
 
-func (s *UsersService) Friends(name, target string) (bool, error) {
+func (s *Users) Friends(name, target string) (bool, error) {
 	resp, err := s.client.rawGet("/users/" + name + "/following/" + target)
 	return resp.StatusCode == 204, err
 }
 
-func (s *UsersService) Me() (*User, error) {
+func (s *Users) Me() (*assist.User, error) {
 	body, err := s.client.get("/user")
 	if err != nil {
 		return nil, err
 	}
-	user := &User{}
+	user := &assist.User{}
 	jsonErr := json.Unmarshal(body, user)
 	return user, jsonErr
 }
 
-func (s *UsersService) Projects(name string) ([]*Project, error) {
+func (s *Users) Projects(name string) ([]*assist.Project, error) {
 	body, err := s.client.get("/users/" + name + "/projects")
 	if err != nil {
 		return nil, err
 	}
-	projects := make([]*Project, 0)
+	projects := make([]*assist.Project, 0)
 	jsonErr := json.Unmarshal(body, projects)
 	return projects, jsonErr
 }
 
-func (s *UsersService) Teams(name string) ([]*Team, error) {
+func (s *Users) Teams(name string) ([]*assist.Team, error) {
 	body, err := s.client.get("/users/" + name + "/teams")
 	if err != nil {
 		return nil, err
 	}
-	teams := make([]*Team, 0)
+	teams := make([]*assist.Team, 0)
 	jsonErr := json.Unmarshal(body, &teams)
 	return teams, jsonErr
 }

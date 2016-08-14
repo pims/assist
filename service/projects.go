@@ -1,28 +1,29 @@
-package assist
+package service
 
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/pims/assist"
 )
 
-type ProjectsService struct {
+type Projects struct {
 	client *Client
 }
 
-func NewProjectsService(client *Client) *ProjectsService {
-	return &ProjectsService{client: client}
+func NewProjects(client *Client) *Projects {
+	return &Projects{client: client}
 }
 
-func (s *ProjectsService) Get(id int) (*Project, error) {
+func (s *Projects) Get(id int) (*assist.Project, error) {
 	body, err := s.client.get(fmt.Sprintf("/projects/%d", id))
 	if err != nil {
 		return nil, err
 	}
-	project := &Project{}
+	project := &assist.Project{}
 	jsonErr := json.Unmarshal(body, project)
 	return project, jsonErr
 }
 
-func (s *ProjectsService) Shots(id int) ([]*Shot, error) {
+func (s *Projects) Shots(id int) ([]*assist.Shot, error) {
 	return s.client.shots(fmt.Sprintf("/projects/%d/shots", id))
 }

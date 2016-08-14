@@ -1,9 +1,10 @@
-package assist
+package service
 
 import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/pims/assist"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -12,17 +13,9 @@ import (
 	"sync"
 )
 
-// Default API endpoint for Dribbble.com
-const DefaultAPIEndpoint = "https://api.dribbble.com/v1"
-
-var (
-	// ErrNotImplemented for methods not yet implemented
-	ErrNotImplemented = errors.New("method not implemented.")
-)
-
 /*
 
-curl -i https://api.dribbble.com/v1/users/simplebits
+curl -i https://assist.dribbble.com/v1/users/simplebits
 
 HTTP/1.1 200 OK
 Date: Thu, 13 Feb 2014 19:30:30 GMT
@@ -53,12 +46,12 @@ type Client struct {
 	client             *http.Client
 	config             *Config
 	RateLimitRemaining int
-	Shots              *ShotsService
-	Users              *UsersService
-	Teams              *TeamsService
-	Buckets            *BucketsService
-	Projects           *ProjectsService
-	Comments           *CommentsService
+	Shots              assist.ShotService
+	Users              assist.UserService
+	Teams              assist.TeamService
+	Buckets            assist.BucketService
+	Projects           assist.ProjectService
+	Comments           assist.CommentService
 	logger             *log.Logger
 	sync.Mutex
 }
@@ -89,12 +82,12 @@ func NewClient(config *Config) *Client {
 
 func configure(client *Client, logger *log.Logger) *Client {
 	client.logger = logger
-	client.Shots = NewShotsService(client)
-	client.Users = NewUsersService(client)
-	client.Teams = NewTeamsService(client)
-	client.Buckets = NewBucketsService(client)
-	client.Projects = NewProjectsService(client)
-	client.Comments = NewCommentsService(client)
+	client.Shots = NewShots(client)
+	client.Users = NewUsers(client)
+	client.Teams = NewTeams(client)
+	client.Buckets = NewBuckets(client)
+	client.Projects = NewProjects(client)
+	client.Comments = NewComments(client)
 	return client
 }
 
@@ -104,7 +97,7 @@ func NewDefaultClient() *Client {
 		client: http.DefaultClient,
 		config: &Config{
 			Token:    os.Getenv("DRIBBBLE_TOKEN"),
-			Endpoint: DefaultAPIEndpoint,
+			Endpoint: assist.DefaultAPIEndpoint,
 		},
 	}
 	return configure(c, defaultLogger)
@@ -176,12 +169,12 @@ func (c *Client) rawGet(path string) (*http.Response, error) {
 
 // Convenience HTTP PUT wrapper
 func (c *Client) put(path string) error {
-	return ErrNotImplemented
+	return assist.ErrNotImplemented
 }
 
 // Convenience HTTP POST wrapper
 func (c *Client) post(path string) error {
-	return ErrNotImplemented
+	return assist.ErrNotImplemented
 }
 
 // Convenience HTTP DELETE wrapper
@@ -192,45 +185,45 @@ func (c *Client) delete(path string) error {
 }
 
 // Convenience method to decode response as []*Shot
-func (c *Client) shots(path string) ([]*Shot, error) {
+func (c *Client) shots(path string) ([]*assist.Shot, error) {
 	body, err := c.get(path)
 	if err != nil {
 		return nil, err
 	}
-	collection := make([]*Shot, 0)
+	collection := make([]*assist.Shot, 0)
 	jsonErr := json.Unmarshal(body, &collection)
 	return collection, jsonErr
 }
 
 // Convenience method to decode response as *Shot
-func (c *Client) shot(path string) (*Shot, error) {
+func (c *Client) shot(path string) (*assist.Shot, error) {
 	body, err := c.get(path)
 	if err != nil {
 		return nil, err
 	}
-	shot := &Shot{}
+	shot := &assist.Shot{}
 	jsonErr := json.Unmarshal(body, shot)
 	return shot, jsonErr
 }
 
 // Convenience method to decode response as []*Bucket
-func (c *Client) buckets(path string) ([]*Bucket, error) {
+func (c *Client) buckets(path string) ([]*assist.Bucket, error) {
 	body, err := c.get(path)
 	if err != nil {
 		return nil, err
 	}
-	collection := make([]*Bucket, 0)
+	collection := make([]*assist.Bucket, 0)
 	jsonErr := json.Unmarshal(body, &collection)
 	return collection, jsonErr
 }
 
 // Convenience method to decode response as *Bucket
-func (c *Client) bucket(path string) (*Bucket, error) {
+func (c *Client) bucket(path string) (*assist.Bucket, error) {
 	body, err := c.get(path)
 	if err != nil {
 		return nil, err
 	}
-	bucket := &Bucket{}
+	bucket := &assist.Bucket{}
 	jsonErr := json.Unmarshal(body, bucket)
 	return bucket, jsonErr
 }
