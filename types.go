@@ -156,3 +156,12 @@ type Attachment struct {
 	ViewsCount   int         `json:"views_count"`
 	CreatedAt    string      `json:"created_at"`
 }
+
+type Comment struct {
+	Id         int    `json:"id"`
+	CreatedAt  string `json:"created_at"`
+	UpdatedAt  string `json:"updated_at"`
+	Body       string `json:"body"`
+	LikesCount int    `json:"likes_count"`
+	LikesUrl   string `json:"likes_url"`
+}

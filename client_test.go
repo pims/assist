@@ -218,3 +218,39 @@ func TestShotAttachment(t *testing.T) {
 	checkInt(t, attachment.Id, 206165)
 	checkInt(t, attachment.Size, 116375)
 }
+
+func TestShotComments(t *testing.T) {
+	ts, client := configureClient("testutils", t)
+	defer ts.Close()
+
+	shotId := 471756
+
+	comments, err := client.Comments.Shot(shotId)
+	if err != nil {
+		t.Errorf("Failed: %v", err)
+		t.FailNow()
+	}
+
+	if len(comments) != 1 {
+		t.Errorf("Comments len doesn't match. Got %d, expected %d", len(comments), 1)
+		t.FailNow()
+	}
+}
+
+func TestShotCommentsLikes(t *testing.T) {
+	ts, client := configureClient("testutils", t)
+	defer ts.Close()
+
+	shotId := 471756
+
+	likes, err := client.Comments.Likes(shotId, 0)
+	if err != nil {
+		t.Errorf("Failed: %v", err)
+		t.FailNow()
+	}
+
+	if len(likes) != 1 {
+		t.Errorf("likes len doesn't match. Got %d, expected %d", len(likes), 1)
+		t.FailNow()
+	}
+}

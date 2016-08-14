@@ -58,6 +58,7 @@ type Client struct {
 	Teams              *TeamsService
 	Buckets            *BucketsService
 	Projects           *ProjectsService
+	Comments           *CommentsService
 	logger             *log.Logger
 	sync.Mutex
 }
@@ -93,6 +94,7 @@ func configure(client *Client, logger *log.Logger) *Client {
 	client.Teams = NewTeamsService(client)
 	client.Buckets = NewBucketsService(client)
 	client.Projects = NewProjectsService(client)
+	client.Comments = NewCommentsService(client)
 	return client
 }
 
