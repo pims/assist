@@ -13,7 +13,7 @@ import "github.com/pims/assist"
 then 
 
 ```go
-client := assist.NewClient("API-KEY")
+client := service.NewClient("API-KEY")
 user, err := client.Users.Get("simplebits") // handle err
 fmt.Println(user.Name) // Dan Cederholm
 ```
@@ -21,8 +21,8 @@ fmt.Println(user.Name) // Dan Cederholm
 or 
 
 ```go
-config := assist.NewConfig(os.Getenv("DRIBBBLE_TOKEN"), assist.DefaultApiEndpoint)
-client = assist.NewClient(config) 
+config := service.NewConfig(os.Getenv("DRIBBBLE_TOKEN"), assist.DefaultApiEndpoint)
+client = service.NewClient(config) 
 user, err = client.Users.Get("simplebits") // handle err
 fmt.Println(user.Name) // Dan Cederholm
 ```
